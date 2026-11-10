@@ -35,6 +35,7 @@ export class CarouselScene {
   private lastPosition = 0;
   private velocity = 0;
   private pointerStart: number | null = null;
+  private pointerStartY: number | null = null;
   private moved = 0;
   private readonly removeListeners: Array<() => void> = [];
 
@@ -121,6 +122,7 @@ export class CarouselScene {
     this.addListener(this.canvas, 'pointerdown', this.onPointerDown);
     this.addListener(window, 'pointermove', this.onPointerMove);
     this.addListener(window, 'pointerup', this.onPointerUp);
+    this.addListener(window, 'pointercancel', this.onPointerUp);
     this.addListener(window, 'keydown', this.onKeyDown);
     this.addListener(this.canvas, 'click', this.onClick);
   }
@@ -138,19 +140,24 @@ export class CarouselScene {
 
   private readonly onPointerDown = (event: PointerEvent): void => {
     this.pointerStart = event.clientX;
+    this.pointerStartY = event.clientY;
     this.moved = 0;
   };
 
   private readonly onPointerMove = (event: PointerEvent): void => {
-    if (this.pointerStart === null) return;
-    const delta = event.clientX - this.pointerStart;
+    if (this.pointerStart === null || this.pointerStartY === null) return;
+    const deltaX = event.clientX - this.pointerStart;
+    const deltaY = event.clientY - this.pointerStartY;
     this.pointerStart = event.clientX;
-    this.moved += Math.abs(delta);
+    this.pointerStartY = event.clientY;
+    this.moved += Math.max(Math.abs(deltaX), Math.abs(deltaY));
+    const delta = Math.abs(deltaY) > Math.abs(deltaX) ? deltaY : deltaX;
     this.nudge(-delta * DRAG_SENSITIVITY);
   };
 
   private readonly onPointerUp = (): void => {
     this.pointerStart = null;
+    this.pointerStartY = null;
   };
 
   private readonly onKeyDown = (event: KeyboardEvent): void => {
