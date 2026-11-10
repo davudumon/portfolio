@@ -196,7 +196,7 @@ export class CarouselScene {
     this.viewportHeight = window.innerHeight;
     const mobile = this.viewportWidth < MOBILE_BREAKPOINT;
     this.cardWidth = mobile ? this.viewportWidth * .84 : Math.min(this.viewportWidth * .56, DESKTOP_CARD_WIDTH);
-    this.cardHeight = this.cardWidth * (mobile ? 1.08 : .58);
+    this.cardHeight = this.cardWidth * .58;
     this.radius = this.cardWidth * (mobile ? .96 : 1.16);
     this.renderer.setSize(this.viewportWidth, this.viewportHeight);
     this.camera.aspect = this.viewportWidth / this.viewportHeight;

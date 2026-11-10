@@ -68,6 +68,7 @@ type HoveredPhoto = {
   alt: string;
   x: number;
   y: number;
+  centered?: boolean;
 };
 
 type PhotoHoverHandler = (photo: HoveredPhoto | null) => void;
@@ -95,6 +96,14 @@ function ExperienceList({ onPhotoHover }: { onPhotoHover: PhotoHoverHandler }): 
       onMouseEnter={(event) => experience.image && onPhotoHover({ src: experience.image, alt: experience.organization, x: event.clientX, y: event.clientY })}
       onMouseMove={(event) => experience.image && onPhotoHover({ src: experience.image, alt: experience.organization, x: event.clientX, y: event.clientY })}
       onMouseLeave={() => onPhotoHover(null)}
+      onClick={(event) => {
+        if (!experience.image || !window.matchMedia('(pointer: coarse)').matches) return;
+        const current = event.currentTarget;
+        onPhotoHover(current.dataset.photoOpen === 'true'
+          ? null
+          : { src: experience.image, alt: experience.organization, x: 0, y: 0, centered: true });
+        current.dataset.photoOpen = current.dataset.photoOpen === 'true' ? 'false' : 'true';
+      }}
     >
       <span className={styles.experienceLogoSlot}>
         {experience.logo ? (
@@ -163,6 +172,14 @@ function AchievementList({ onPhotoHover }: { onPhotoHover: PhotoHoverHandler }):
       onMouseEnter={(event) => achievement.image && onPhotoHover({ src: achievement.image, alt: achievement.text, x: event.clientX, y: event.clientY })}
       onMouseMove={(event) => achievement.image && onPhotoHover({ src: achievement.image, alt: achievement.text, x: event.clientX, y: event.clientY })}
       onMouseLeave={() => onPhotoHover(null)}
+      onClick={(event) => {
+        if (!achievement.image || !window.matchMedia('(pointer: coarse)').matches) return;
+        const current = event.currentTarget;
+        onPhotoHover(current.dataset.photoOpen === 'true'
+          ? null
+          : { src: achievement.image, alt: achievement.text, x: 0, y: 0, centered: true });
+        current.dataset.photoOpen = current.dataset.photoOpen === 'true' ? 'false' : 'true';
+      }}
     >
       <span className={`${styles.achievementPosition} ${achievement.position === '3rd' ? styles.bronze : styles.silver}`}>{achievement.position}</span>
       <span>{achievement.text}</span>
@@ -173,12 +190,12 @@ function AchievementList({ onPhotoHover }: { onPhotoHover: PhotoHoverHandler }):
 function PhotoPreview({ photo }: { photo: HoveredPhoto | null }): ReactElement | null {
   if (!photo?.src) return null;
 
-  const style = {
-    transform: `translate3d(${photo.x + 18}px, ${photo.y + 18}px, 0)`,
-  } as CSSProperties;
+  const style = photo.centered
+    ? undefined
+    : { transform: `translate3d(${photo.x + 18}px, ${photo.y + 18}px, 0)` } as CSSProperties;
 
   return (
-    <div className={styles.photoPreview} style={style} aria-hidden="true">
+    <div className={`${styles.photoPreview} ${photo.centered ? styles.photoPreviewCentered : ''}`} style={style} aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={photo.src} alt="" />
     </div>
