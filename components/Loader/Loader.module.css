@@ -1,0 +1,1 @@
+.loader{position:fixed;inset:0;background:var(--bg);z-index:100;display:grid;place-items:center;font-size:clamp(3rem,12vw,10rem);font-weight:600;letter-spacing:-.08em;font-variant-numeric:tabular-nums;transition:transform .9s var(--ease-expo)}.hidden{transform:translateY(-100%)}

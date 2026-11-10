@@ -1,0 +1,12 @@
+export const CARD_TEXTURE_WIDTH = 1600;
+export const CARD_TEXTURE_HEIGHT = 930;
+export const CARD_SEGMENTS = 64;
+export const CAMERA_Z = 1800;
+export const MAX_PIXEL_RATIO = 2;
+export const DESKTOP_CARD_WIDTH = 940;
+export const MOBILE_BREAKPOINT = 760;
+export const WHEEL_SENSITIVITY = 0.0016;
+export const DRAG_SENSITIVITY = 0.004;
+export const SWIPE_THRESHOLD = 8;
+export const CAROUSEL_EASE = 'power3.out';
+export const DETAIL_EASE = 'expo.inOut';
